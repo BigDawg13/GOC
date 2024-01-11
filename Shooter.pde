@@ -3,7 +3,7 @@ class Shooter extends Invader {
     long mark, wait = 1200; // ms
 
     Shooter(float x, float y) {
-        super(x, y);
+        super(x, y, 40, 40);
         mark = millis();
     }
 
