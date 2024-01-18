@@ -5,6 +5,7 @@ void setup() {
     _SM = new SpriteManager();
     _SM.spawn(new Invader(250, 50, 40, 40));
     _SM.spawn(new Shooter(150, 100));
+    _SM.spawn(new MiniBoss(500, 200));
 }
 
 void draw() {
