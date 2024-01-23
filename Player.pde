@@ -1,5 +1,8 @@
 class Player extends Sprite {
     boolean left, right, up, down;
+    long mark, wait = 500; // ms
+    int lives = 10;
+    boolean disabled = false;
     
     Player(float x, float y) {
         // super refers to the parent
@@ -36,7 +39,11 @@ class Player extends Sprite {
 
     @Override
     void handleCollision() {
-        // don't die.
+      lives -=1;
+      if(lives <= 0) {
+        super.handleCollision();
+        disabled = true;
+      }
     }
 
     void keyUp() {
@@ -62,12 +69,36 @@ class Player extends Sprite {
             case 'w':
             case 'W': up = true; break;
             case ' ':
-            case 'f': fire(); break;
+            case 'f': if(!disabled) fire(); break;
+            case 'c': if(!disabled) multiShot(); break;
+            case 'x': if(!disabled) BigBoy(); break;
         }
+    }
+
+    void multiShot() {
+      super.update();
+      PVector aim = new PVector(0, -10);
+      PVector aimR = new PVector(1, -10);
+      PVector aimL = new PVector(-1, -10);
+  
+      aim = aim.normalize().mult(12); // turn this into a single unit vector, then increase its magnitude
+      aimR = aimR.normalize().mult(12);
+      aimL= aimL.normalize().mult(12);
+  
+      if(millis() - mark > wait) {
+        mark = millis();
+        _SM.spawn(new Bullet(pos, aim, team));
+        _SM.spawn(new Bullet(pos, aimR, team));
+        _SM.spawn(new Bullet(pos, aimL, team));
+      }
     }
 
     void fire() {
         PVector aim = new PVector(0, -10); // up
         _SM.spawn(new Bullet(pos.x, pos.y, aim, team));
+    }
+    void BigBoy() {
+      PVector aim = new PVector(0, -8); // up
+      _SM.spawn(new BigBullet(pos.x, pos.y, aim, team));
     }
 }
