@@ -12,6 +12,12 @@ class Sprite {
         
     }
     
+    private void resetLives() {
+      asdf = 10;
+    }
+    
+    
+    
     void display() {
         fill(255);
         ellipse(pos.x, pos.y, size.x, size.y);

@@ -9,6 +9,33 @@ class SpriteManager {
         spawn(player);
     }
     
+    void endScreenJazz() {
+        Player end = new Player(width / 2, height - 100);
+        spawn(player);
+        if(key == 'N' || key == 'n') {
+          killEverything();
+          asdf = 5;
+          player = new Player(width / 2, height - 100);
+          spawn(player);
+          Level1();
+        }
+    }
+    
+    boolean levCheck() {
+      if(active.size() == 0) {
+        level++;
+        return true;
+      }
+      return false;
+    }
+    
+    void killEverything() {
+      for(Sprite a : active) {
+        destroyed.add(a);
+      }
+      bringOutTheDead();
+    }
+    
     void destroy(Sprite target) {
         destroyed.add(target);
     }

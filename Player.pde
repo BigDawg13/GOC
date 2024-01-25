@@ -1,7 +1,6 @@
 class Player extends Sprite {
     boolean left, right, up, down;
     long mark, wait = 500; // ms
-    int lives = 10;
     boolean disabled = false;
     
     Player(float x, float y) {
@@ -38,13 +37,15 @@ class Player extends Sprite {
     }
 
     @Override
-    void handleCollision() {
-      lives -=1;
-      if(lives <= 0) {
+    public void handleCollision() {
+      asdf -= 1;
+      if(asdf <= 0) {
         super.handleCollision();
         disabled = true;
       }
     }
+    
+    
 
     void keyUp() {
         switch(key) { // key is a global value
@@ -98,7 +99,10 @@ class Player extends Sprite {
         _SM.spawn(new Bullet(pos.x, pos.y, aim, team));
     }
     void BigBoy() {
-      PVector aim = new PVector(0, -8); // up
-      _SM.spawn(new BigBullet(pos.x, pos.y, aim, team));
+      if(millis() - mark > wait) {
+        mark = millis();
+        PVector aim = new PVector(0, -8); // up
+        _SM.spawn(new BigBullet(pos.x, pos.y, aim, team));
+      }
     }
 }
