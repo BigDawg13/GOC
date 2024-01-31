@@ -3,6 +3,9 @@ class SpriteManager {
     
     ArrayList<Sprite> active = new ArrayList<Sprite>();
     ArrayList<Sprite> destroyed = new ArrayList<Sprite>();
+    int mark = 1000; // ms
+    long wait = millis();
+    long done = 0;
     
     SpriteManager() {
         player = new Player(width / 2, height - 100);
@@ -11,21 +14,53 @@ class SpriteManager {
     
     void endScreenJazz() {
         Player end = new Player(width / 2, height - 100);
-        spawn(player);
+        spawn(end);
         if(key == 'N' || key == 'n') {
           killEverything();
           asdf = 5;
           player = new Player(width / 2, height - 100);
           spawn(player);
-          Level1();
+          level = 1;
+        }
+    }
+    void endScreenJazzL1() {
+        Player end = new Player(width / 2, height - 100);
+        spawn(end);
+        if(key == 'N' || key == 'n') {
+          killEverything();
+          if(asdf <= 0) Level1();
+          asdf = 5;
+          player = new Player(width / 2, height - 100);
+          spawn(player);
+          level = 1;
+          //Level1();
         }
     }
     
+    private void levelUp() {
+      level++;
+    }
+    
+    public void setWait() {
+      wait = millis();
+    };
+    
     boolean levCheck() {
-      if(active.size() == 0) {
-        level++;
-        return true;
+      if(active.size() == 1 && level != -1 && level != 6) {
+        _TM.levelUp();
+        if(done < 1) {
+          done++;
+          setWait();
+        }
+        if(millis() > wait + mark) {
+          //wait = millis();
+          levelUp();
+          done = 0;
+          return true;
+        }
+        
       }
+      else if(level == 6) return true;
       return false;
     }
     
